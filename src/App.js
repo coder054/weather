@@ -5,12 +5,12 @@ import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom"
 import Notfound from "./components/Notfound"
 import ForecastOneCity from "./components/ForecastOneCity"
 import Home from "./components/Home"
-
+import "bootstrap/dist/css/bootstrap.css"
 class App extends Component {
 	render() {
 		return (
 			<Router>
-				<div className="App">
+				<div className="App container">
 					<Switch>
 						<Route path="/forecast/:cityname" component={ForecastOneCity} />
 						<Route path="/" exact component={Home} />
