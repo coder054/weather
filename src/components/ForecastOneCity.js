@@ -60,6 +60,7 @@ var chartOptions = {
 
 class ForecastOneCity extends Component {
 	state = {
+		loaded: false,
 		dataForecast: {},
 		day: "today",
 		chartData: {
@@ -97,7 +98,16 @@ class ForecastOneCity extends Component {
 			],
 		},
 	}
-	async componentDidMount() {
+
+	componentDidUpdate(prevProps, prevState) {
+		// only update chart if the data has changed
+		if (prevProps.match.params.cityname !== this.props.match.params.cityname) {
+			this.fetchData()
+		}
+	}
+
+	async fetchData() {
+		this.setState({ loaded: false })
 		let today = moment().format("YYYY-MM-DD")
 		let day2 = moment(new Date())
 			.add(1, "days")
@@ -115,14 +125,29 @@ class ForecastOneCity extends Component {
 		this.setState({ today, day2, day3, day4, day5 })
 
 		let cityname = this.props.match.params.cityname
+		console.log("fetch data for" + cityname)
 
-		let forecastData = await axios.get(
-			`${config.root_url_5days_forecast}?appid=${config.app_key}&q=${cityname}`
-		)
+		try {
+			let forecastData = await axios.get(
+				`${config.root_url_5days_forecast}?appid=${
+					config.app_key
+				}&q=${cityname}`
+			)
+			this.setState({ dataForecast: forecastData })
+			this.caculateData()
+			this.setState({ show: true })
+			this.setState({ loaded: true })
+			this.setState({ cityNotFound: false })
+		} catch (err) {
+			console.log(err)
+			this.setState({ cityNotFound: true, loaded: true })
+		}
+		console.log(this.state)
+	}
 
-		this.setState({ dataForecast: forecastData })
-		this.caculateData()
-		this.setState({ show: true })
+	async componentDidMount() {
+		console.log("cwm")
+		this.fetchData()
 	}
 
 	async caculateData() {
@@ -131,7 +156,7 @@ class ForecastOneCity extends Component {
 		let dataList = this.state.dataForecast.data.list.filter(item => {
 			return item.dt_txt.includes(day)
 		})
-	
+
 		let tempList = []
 		let humidityList = []
 
@@ -146,8 +171,6 @@ class ForecastOneCity extends Component {
 				humidityList.unshift(null)
 			}
 		}
-
-
 
 		let newState = update(this.state, {
 			chartData: {
@@ -166,82 +189,93 @@ class ForecastOneCity extends Component {
 		this.caculateData()
 	}
 
+	renderContent() {
+		if (!this.state.loaded) {
+			return <div>Fetching data...</div>
+		} else {
+			if (this.state.cityNotFound) {
+				return <div>City not found</div>
+			} else {
+				return (
+					<div>
+						<p className="title">
+							Weather Forecast for{" "}
+							<span className="cityname">
+								{this.props.match.params.cityname}
+							</span>{" "}
+							in 5 days
+						</p>
+						{this.state.show ? (
+							<LineChart
+								data={this.state.chartData}
+								options={chartOptions}
+								width="900"
+								height="450"
+							/>
+						) : (
+							<div> Loading... </div>
+						)}
+
+						<div>
+							<button
+								onClick={() => {
+									this.changeDay("today")
+								}}
+								className="btn btn-info mr-2"
+							>
+								{" "}
+								{this.state.today}{" "}
+							</button>
+							<button
+								onClick={() => {
+									this.changeDay("day2")
+								}}
+								className="btn btn-info mr-2"
+							>
+								{" "}
+								{this.state.day2}{" "}
+							</button>
+							<button
+								onClick={() => {
+									this.changeDay("day3")
+								}}
+								className="btn btn-info mr-2"
+							>
+								{" "}
+								{this.state.day3}{" "}
+							</button>
+							<button
+								onClick={() => {
+									this.changeDay("day4")
+								}}
+								className="btn btn-info mr-2"
+							>
+								{" "}
+								{this.state.day4}{" "}
+							</button>
+							<button
+								onClick={() => {
+									this.changeDay("day5")
+								}}
+								className="btn btn-info mr-2"
+							>
+								{" "}
+								{this.state.day5}{" "}
+							</button>
+						</div>
+
+						<div>
+							{" "}
+							Day: {this.state[this.state.day]} - ({this.state.day}){" "}
+						</div>
+					</div>
+				)
+			}
+		}
+	}
+
 	render() {
-		return (
-			<div className="ForecastOneCity-wrapper">
-				<p className="title">
-				
-					Weather Forecast for{" "}
-					<span className="cityname">
-						{this.props.match.params.cityname}
-					</span> {" "}
-					in 5 days
-				</p>
-				{this.state.show ? (
-					<LineChart
-						data={this.state.chartData}
-						options={chartOptions}
-						width="900"
-						height="450"
-					/>
-				) : (
-					<div> Loading... </div>
-				)}
-
-				<div>
-					<button
-						onClick={() => {
-							this.changeDay("today")
-						}}
-						className="btn btn-info mr-2"
-					>
-						{" "}
-						{this.state.today}{" "}
-					</button>
-					<button
-						onClick={() => {
-							this.changeDay("day2")
-						}}
-						className="btn btn-info mr-2"
-					>
-						{" "}
-						{this.state.day2}{" "}
-					</button>
-					<button
-						onClick={() => {
-							this.changeDay("day3")
-						}}
-						className="btn btn-info mr-2"
-					>
-						{" "}
-						{this.state.day3}{" "}
-					</button>
-					<button
-						onClick={() => {
-							this.changeDay("day4")
-						}}
-						className="btn btn-info mr-2"
-					>
-						{" "}
-						{this.state.day4}{" "}
-					</button>
-					<button
-						onClick={() => {
-							this.changeDay("day5")
-						}}
-						className="btn btn-info mr-2"
-					>
-						{" "}
-						{this.state.day5}{" "}
-					</button>
-				</div>
-
-				<div>
-					{" "}
-					Day: {this.state[this.state.day]} - ({this.state.day}){" "}
-				</div>
-			</div>
-		)
+		return <div className="ForecastOneCity-wrapper">{this.renderContent()}</div>
 	}
 }
 
