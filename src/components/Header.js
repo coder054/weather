@@ -3,11 +3,11 @@ import { Link } from "react-router-dom"
 import { withRouter } from "react-router-dom"
 class Header extends Component {
 	state = {
-		cityname: ''
+		cityname: "",
 	}
-	handleSubmit = (e) => {
+	handleSubmit = e => {
 		e.preventDefault()
-		this.props.history.push(this.state.cityname)
+		this.props.history.push(`/forecast/${this.state.cityname}`)
 	}
 	render() {
 		return (
@@ -36,7 +36,7 @@ class Header extends Component {
 					>
 						<input
 							value={this.state.cityname}
-							onChange={(e)=> this.setState({cityname: e.target.value})  }
+							onChange={e => this.setState({ cityname: e.target.value })}
 							className="form-control mr-sm-2"
 							type="search"
 							placeholder="Search city"

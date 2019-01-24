@@ -25,7 +25,7 @@ class Home extends Component {
 
 		Promise.all(requestList)
 			.then(values => {
-				console.log(values)
+				
 				this.setState({ weatherList: values })
 			})
 			.catch(err => console.log(err))
@@ -45,10 +45,10 @@ class Home extends Component {
 					</thead>
 					<tbody>
 						{this.state.weatherList.length && this.state.weatherList
-						  ? this.state.weatherList.map((city, key) => (
-						      <OneRow city={city} key={key}></OneRow>
-						    ))
-						  : null
+							? this.state.weatherList.map((city, key) => (
+									<OneRow city={city} key={key}></OneRow>
+								))
+							: null
 						}
 						<tr>
 							<td></td>
