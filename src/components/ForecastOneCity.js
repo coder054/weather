@@ -5,58 +5,7 @@ import moment from "moment"
 import { convertKelvinToCelsius } from "../helpers"
 import update from "immutability-helper"
 
-var LineChart = require("react-chartjs").Line
-
-var chartOptions = {
-	///Boolean - Whether grid lines are shown across the chart
-	scaleShowGridLines: true,
-
-	//String - Colour of the grid lines
-	scaleGridLineColor: "rgba(0,0,0,.05)",
-
-	//Number - Width of the grid lines
-	scaleGridLineWidth: 1,
-
-	//Boolean - Whether to show horizontal lines (except X axis)
-	scaleShowHorizontalLines: true,
-
-	//Boolean - Whether to show vertical lines (except Y axis)
-	scaleShowVerticalLines: true,
-
-	//Boolean - Whether the line is curved between points
-	bezierCurve: true,
-
-	//Number - Tension of the bezier curve between points
-	bezierCurveTension: 0.4,
-
-	//Boolean - Whether to show a dot for each point
-	pointDot: true,
-
-	//Number - Radius of each point dot in pixels
-	pointDotRadius: 4,
-
-	//Number - Pixel width of point dot stroke
-	pointDotStrokeWidth: 1,
-
-	//Number - amount extra to add to the radius to cater for hit detection outside the drawn point
-	pointHitDetectionRadius: 20,
-
-	//Boolean - Whether to show a stroke for datasets
-	datasetStroke: true,
-
-	//Number - Pixel width of dataset stroke
-	datasetStrokeWidth: 2,
-
-	//Boolean - Whether to fill the dataset with a colour
-	datasetFill: true,
-
-	//String - A legend template
-	legendTemplate:
-		'<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].strokeColor%>"><%if(datasets[i].label){%><%=datasets[i].label%><%}%></span></li><%}%></ul>',
-
-	//Boolean - Whether to horizontally center the label and point dot inside the grid
-	offsetGridLines: false,
-}
+const LineChart = require("react-chartjs").Line
 
 class ForecastOneCity extends Component {
 	state = {
@@ -83,7 +32,7 @@ class ForecastOneCity extends Component {
 					pointStrokeColor: "#fff",
 					pointHighlightFill: "#fff",
 					pointHighlightStroke: "rgba(220,220,220,1)",
-					data: [10, 66, 59, 80, 81, 56, 55, 40],
+					data: [1, 1, 1, 1, 1, 1, 1, 1],
 				},
 				{
 					label: "Humidity",
@@ -93,14 +42,14 @@ class ForecastOneCity extends Component {
 					pointStrokeColor: "#fff",
 					pointHighlightFill: "#fff",
 					pointHighlightStroke: "rgba(151,187,205,1)",
-					data: [1, 28, 48, 40, 19, 86, 27, 90],
+					data: [1, 1, 1, 1, 1, 1, 1, 1],
 				},
 			],
 		},
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-		// only update chart if the data has changed
+		// only update chart if the cityname has changed
 		if (prevProps.match.params.cityname !== this.props.match.params.cityname) {
 			this.fetchData()
 		}
@@ -208,7 +157,7 @@ class ForecastOneCity extends Component {
 						{this.state.show ? (
 							<LineChart
 								data={this.state.chartData}
-								options={chartOptions}
+								options={config.chart_option}
 								width="900"
 								height="450"
 							/>
