@@ -150,13 +150,13 @@ const Item = observer(
 													<div className="answer-list"> 	
 {!!answer_a.imga && (
   															<li>  		
-																A: {answer_a.imga} <img onClick={this.handleClick.bind(this, 'answer_a')} className={classNames({'checked': this.mobxstate.answer_a})} src="http://lorempixel.com/100/100/" alt=""/>  		
+																A: {answer_a.imga} <img onClick={this.handleClick.bind(this, 'answer_a')} className={classNames({'checked': this.mobxstate.answer_a})} src={answer_a.imga} alt=""/>  		
 															</li> 		
   														
 )}
 {!!answer_b.imgb && (
 	  															<li>  		
-																	B: {answer_b.imgb} <img  onClick={this.handleClick.bind(this, 'answer_b')}  className={classNames({'checked': this.mobxstate.answer_b})}  src="http://lorempixel.com/100/100/" alt=""/> 		
+																	B: {answer_b.imgb} <img  onClick={this.handleClick.bind(this, 'answer_b')}  className={classNames({'checked': this.mobxstate.answer_b})}  src={answer_b.imgb} alt=""/> 		
 																</li> 	
 	  														
 	)}	
