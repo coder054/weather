@@ -7,6 +7,7 @@ import ForecastOneCity from "./components/ForecastOneCity"
 import Home from "./components/Home"
 import Header from './components/Header';
 import Question from './components/Question';
+import TestTriNho from './components/TestTriNho';
 import "bootstrap/dist/css/bootstrap.css"
 
 
@@ -19,6 +20,7 @@ class App extends Component {
 					<Switch>
 						<Route path="/forecast/:cityname" component={ForecastOneCity} />
 						<Route path="/question/:id" component={Question} />
+						<Route path="/testtrinho" component={TestTriNho} />
 						<Route path="/" exact component={Home} />
 						<Route exact path="*" component={Notfound} />
 					</Switch>
